@@ -11,16 +11,24 @@ class SourceLynx
 	const SOURCE_NAME = 'Lynx';
 
 
-	public static function run( $target )
+	public static function run( $target, $tor, $malicious )
 	{
+		if( $malicious ) {
+			$dork = 'site%3A'.$target.'+inurl%3A"&"';
+		} else {
+			$dork = 'site%3A'.$target;
+		}
+		
 		$t_urls = [];
-		//$cmd = 'lynx -listonly -dump http://www.google.com/search?q=site%3A'.$target.'&start=0&num=1000';
-		$cmd = 'lynx -listonly -dump "http://www.google.com/search?q=site%3A'.$target.'+inurl%3A%22%26%22&start=0&num=1000"';
+		$cmd = 'lynx -useragent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -listonly -dump http://www.google.com/search?q='.$dork.'&start=0&num=1000';
+		if( $tor ) {
+			$cmd = 'torsocks '.$cmd;
+		}
 		echo $cmd."\n";
 		exec( $cmd, $output );
 		$output = implode( "\n", $output );
-		//file_put_contents( 'lynx.txt', implode("\n",$output) );
-		//$output = file_get_contents( 'lynx.txt' );
+		//file_put_contents( 'lynx.txt', $output );
+		$output = file_get_contents( 'lynx.txt' );
 		//var_dump( $output );
 		
 		//$r = '#http[s]?://'.$target.'(.*)#i';
@@ -32,14 +40,14 @@ class SourceLynx
 		}
 		
 		$r = '#/search\?q=related:(http[s]?://'.$target.'.*)&hl=#i';
-	    preg_match_all( $r, $output, $tmp );
+	    $m = preg_match_all( $r, $output, $tmp );
 		//var_dump( $tmp );
 		if( $m ) {
 			$t_urls = array_merge( $t_urls, $tmp[1] );
 		}
 		
-		$r = '#/search\?q=cache:.*:(http[s]?://'.$target.'.*)\+site:#i';
-	    preg_match_all( $r, $output, $tmp );
+		$r = '#/search\?q=cache:.*:(http[s]?://'.$target.'.*)\+#i';
+	    $m = preg_match_all( $r, $output, $tmp );
 		//var_dump( $tmp );
 		if( $m ) {
 			$t_urls = array_merge( $t_urls, $tmp[1] );

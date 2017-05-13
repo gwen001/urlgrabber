@@ -38,6 +38,18 @@ function __autoload( $c ) {
 				$i++;
 				break;
 
+			case '--malicious':
+				$grabber->enableMaliciousSearch();
+				break;
+
+			case '--no-assets':
+				$grabber->excludeAssets();
+				break;
+
+			case '--tor':
+				$grabber->enableTor();
+				break;
+
 			default:
 				Utils::help('Unknown option: '.$_SERVER['argv'][$i]);
 		}

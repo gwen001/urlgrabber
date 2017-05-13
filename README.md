@@ -7,8 +7,11 @@ Usage: php urlgrabber.php [OPTIONS] --target <target>
 
 Options:
 	-h, --help	print this help
-	--target	targeted website
+	--malicious	enable malicious search, urls (with parameters) containing "&" or "?"
+	--no-assets	exclude assets
 	--source	source to use, default=all
+	--target	targeted website
+	--tor	use tor (must be installed and enabled)
 	-verbose	verbosity level:
 			0=everything (default)
 			1=XSS and errors

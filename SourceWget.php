@@ -11,12 +11,15 @@ class SourceWget
 	const SOURCE_NAME = 'Wget';
 
 
-	public static function run( $target )
+	public static function run( $target, $tor, $malicious )
 	{
 		$t_urls = [];
 		$domain = Utils::extractDomain( $target );
 		$tmpfile = tempnam( '/tmp', 'ug_' );
-		$cmd = 'wget --no-check-certificate --random-wait -U "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1" -r -l1 --spider -D '.$domain.' http://'.$target.'/ -o '.$tmpfile;
+		$cmd = 'wget --no-check-certificate --random-wait --user-agent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -r -l1 --spider -D '.$domain.' http://'.$target.'/ -o '.$tmpfile;
+		if( $tor ) {
+			$cmd = 'torsocks '.$cmd;
+		}
 		echo $cmd."\n";
 		//exit();
 		exec( $cmd, $output );
@@ -29,6 +32,14 @@ class SourceWget
 		//var_dump( $tmp );
 		if( $m ) {
 			$t_urls = array_merge( $t_urls, $tmp[1] );
+		}
+		
+		if( $malicious ) {
+			foreach( $t_urls as $k=>$u ) {
+				if( !strstr($u,'&') ) {
+					unset( $t_urls[$k] );
+				}
+			}
 		}
 		
 		$t_urls = array_unique( $t_urls );
