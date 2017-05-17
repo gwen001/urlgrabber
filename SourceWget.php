@@ -21,7 +21,6 @@ class SourceWget
 			$cmd = 'torsocks '.$cmd;
 		}
 		echo $cmd."\n";
-		exit();
 		exec( $cmd, $output );
 		$output = file_get_contents( $tmpfile );
 		//$output = file_get_contents( 'wget.txt' );

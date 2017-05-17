@@ -28,8 +28,8 @@ class SourceInurlbr
 		$cmd = 'inurlbr '.($tor?'--tor-random':'').' --user-agent "'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" --no-banner --dork "site:'.$target.'" -s '.$tmpfile.' -q 1,6 --mp 200';
 		echo $cmd."\n";
 		//exit();
-		//exec( $cmd, $output );
-		$tmpfile = 'inurlbr.txt';
+		exec( $cmd, $output );
+		//$tmpfile = 'inurlbr.txt';
 		//var_dump( $output );
 		
 		$t_urls = file( $tmpfile, FILE_IGNORE_NEW_LINES |  FILE_SKIP_EMPTY_LINES );
@@ -73,7 +73,7 @@ class SourceInurlbr
 		//var_dump( $t_urls );
 		//exit();
 		
-		//@unlink( $tmpfile );
+		@unlink( $tmpfile );
 		@unlink( $dorkfile );
 
 		return $t_urls;
