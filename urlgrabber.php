@@ -28,14 +28,8 @@ function __autoload( $c ) {
 				Utils::help();
 				break;
 
-			case '--source':
-				$grabber->setSource($_SERVER['argv'][$i + 1]);
-				$i++;
-				break;
-
-			case '--target':
-				$grabber->setTarget($_SERVER['argv'][$i + 1]);
-				$i++;
+			case '--https':
+				$grabber->enableHttps();
 				break;
 
 			case '--malicious':
@@ -44,6 +38,16 @@ function __autoload( $c ) {
 
 			case '--no-assets':
 				$grabber->excludeAssets();
+				break;
+
+			case '--source':
+				$grabber->setSource($_SERVER['argv'][$i + 1]);
+				$i++;
+				break;
+
+			case '--target':
+				$grabber->setTarget($_SERVER['argv'][$i + 1]);
+				$i++;
 				break;
 
 			case '--tor':
@@ -65,7 +69,7 @@ function __autoload( $c ) {
 // main loop
 {
 	$grabber->run();
-	$grabber->printUrls();
+	//$grabber->printResult();
 }
 // ---
 

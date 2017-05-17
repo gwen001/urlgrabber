@@ -27,6 +27,7 @@ class UrlGrabber
 	private $tor = false;
 	private $malicious = false;
 	private $assets = true;
+	private $https = false;
 	
 	private $t_urls = [];
 
@@ -54,6 +55,11 @@ class UrlGrabber
 	
 	public function excludeAssets() {
 		$this->assets = false;
+	}
+	
+	
+	public function enableHttps() {
+		$this->https = true;
 	}
 	
 	
@@ -100,38 +106,55 @@ class UrlGrabber
 		foreach( $this->t_run as $s ) {
 			$class = $s;
 			echo "Testing ".$class::SOURCE_NAME."...\n";
-			$t_urls = $class::run( $this->target, $this->tor, $this->malicious );
+			$t_urls = $class::run( $this->target, $this->tor, $this->malicious, $this->https );
+			$t_urls = array_unique( $t_urls );
+			if( !$this->assets ) {
+				$t_urls = $this->removeAssets( $t_urls );
+			}
 			$this->t_urls = array_merge( $this->t_urls, $t_urls );
-			echo count( $t_urls )." urls found.\n";
+			echo count( $t_urls )." urls found.\n\n";
+			$this->printUrls( $t_urls );
 			echo "\n";
 		}
+		
+		return true;
 		
 		$this->t_urls = array_unique( $this->t_urls );
 		
 		if( !$this->assets ) {
-			$this->removeAssets();
+			$this->removeAssets( $this->t_urls );
 		}
+
+		return true;
 	}
 	
 	
-	public function removeAssets()
+	public function removeAssets( $t_urls )
 	{
-		foreach( $this->t_urls as $k=>$u ) {
+		foreach( $t_urls as $k=>$u ) {
 			$parse = parse_url( $u );
 			//var_dump( $parse['path'] );
 			if( strstr($parse['path'],'.') ) {
 				$ext = substr( $parse['path'], strrpos($parse['path'],'.')+1 );
 				//var_dump($ext);
 				if( in_array($ext,self::T_ASSETS_EXTENSIONS) ) {
-					unset( $this->t_urls[$k] );
+					unset( $t_urls[$k] );
 				}
 			}
 		}
+		
+		return $t_urls;
 	}
 	
 	
-	public function printUrls()
+	public function printResult()
 	{
-		echo implode( "\n", $this->t_urls )."\n";
+		$this->printUrls( $this->t_url );
+	}
+	
+	
+	private function printUrls( $t_urls )
+	{
+		echo implode( "\n", $t_urls )."\n";
 	}
 }

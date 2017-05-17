@@ -11,7 +11,7 @@ class SourceLynx
 	const SOURCE_NAME = 'Lynx';
 
 
-	public static function run( $target, $tor, $malicious )
+	public static function run( $target, $tor, $malicious, $https )
 	{
 		if( $malicious ) {
 			$dork = 'site%3A'.$target.'+inurl%3A"&"';
@@ -28,11 +28,24 @@ class SourceLynx
 		exec( $cmd, $output );
 		$output = implode( "\n", $output );
 		//file_put_contents( 'lynx.txt', $output );
-		$output = file_get_contents( 'lynx.txt' );
+		//$output = file_get_contents( 'lynx.txt' );
 		//var_dump( $output );
 		
-		//$r = '#http[s]?://'.$target.'(.*)#i';
+		$r = '#\s*[0-9]+\.\s*(http[s]?://'.$target.'.*)#i';
+		$m = preg_match_all( $r, $output, $tmp );
+		//var_dump( $tmp );
+		if( $m ) {
+			$t_urls = array_merge( $t_urls, $tmp[1] );
+		}
+		
 		$r = '#/url\?q=(http[s]?://'.$target.'.*)&sa=.*#i';
+		$m = preg_match_all( $r, $output, $tmp );
+		//var_dump( $tmp );
+		if( $m ) {
+			$t_urls = array_merge( $t_urls, $tmp[1] );
+		}
+		
+		$r = '#/translate\?hl=[a-z]+&sl=[a-z]+&u=(http[s]?://'.$target.'.*)&prev=#i';
 		$m = preg_match_all( $r, $output, $tmp );
 		//var_dump( $tmp );
 		if( $m ) {

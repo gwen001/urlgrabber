@@ -11,12 +11,12 @@ class SourceWget
 	const SOURCE_NAME = 'Wget';
 
 
-	public static function run( $target, $tor, $malicious )
+	public static function run( $target, $tor, $malicious, $https )
 	{
 		$t_urls = [];
 		$domain = Utils::extractDomain( $target );
 		$tmpfile = tempnam( '/tmp', 'ug_' );
-		$cmd = 'wget --no-check-certificate --random-wait --user-agent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -r -l1 --spider -D '.$domain.' http://'.$target.'/ -o '.$tmpfile;
+		$cmd = 'wget --no-check-certificate --random-wait --user-agent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -r -l2 --spider -D '.$domain.' http'.($https?'s':'').'://'.$target.'/ -o '.$tmpfile;
 		if( $tor ) {
 			$cmd = 'torsocks '.$cmd;
 		}

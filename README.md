@@ -7,19 +7,17 @@ Usage: php urlgrabber.php [OPTIONS] --target <target>
 
 Options:
 	-h, --help	print this help
+	--https		force https
 	--malicious	enable malicious search, urls (with parameters) containing "&" or "?"
 	--no-assets	exclude assets
 	--source	source to use, default=all
 	--target	targeted website
-	--tor	use tor (must be installed and enabled)
-	-verbose	verbosity level:
-			0=everything (default)
-			1=XSS and errors
-			2=XSS only
+	--tor		use tor (must be installed and enabled)
 
 Examples:
 	php urlgrabber.php --target <www.example.com>
 	php urlgrabber.php --target <www.example.com> --source 1,2
+	php urlgrabber.php --target <www.example.com> --malicious --no-assets
 	
 Available sources are:
 	1. Google via Lynx
