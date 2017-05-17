@@ -18,6 +18,7 @@ function __autoload( $c ) {
 	$grabber->registerSource( 1, 'SourceLynx' );
 	$grabber->registerSource( 2, 'SourceInurlbr' );
 	$grabber->registerSource( 3, 'SourceWget' );
+	$grabber->registerSource( 9, 'SourceLoop' );
 
 	$argc = $_SERVER['argc'] - 1;
 

@@ -11,7 +11,7 @@ class SourceLynx
 	const SOURCE_NAME = 'Lynx';
 
 
-	public static function run( $target, $tor, $malicious, $https )
+	public static function run( $target, $tor, $malicious, $https, $params )
 	{
 		if( $malicious ) {
 			$dork = 'site%3A'.$target.'+inurl%3A"&"';

@@ -16,13 +16,14 @@ Options:
 
 Examples:
 	php urlgrabber.php --target <www.example.com>
-	php urlgrabber.php --target <www.example.com> --source 1,2
+	php urlgrabber.php --target <www.example.com> --source 1,2,95
 	php urlgrabber.php --target <www.example.com> --malicious --no-assets
 	
 Available sources are:
 	1. Google via Lynx
 	2. Google via INURLBR
-	3. Wget
+	3x. Wget, x=depth, default=1
+	9x. Loop, will check the source code of urls found to try to get new urls, x=how many loops, default=1
 ```
 
 I don't believe in license.  

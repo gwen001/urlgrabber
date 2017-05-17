@@ -8,6 +8,8 @@
 
 class UrlGrabber
 {
+	const LOOPING_INDEX = 9;
+	
 	const T_ASSETS_EXTENSIONS = [ 'js', 'css', 'woff', 'woff2', 'png', 'ico', 'gif', 'jpg', 'jpeg', 'txt', 'pdf', 'xml' ];
 	
 	const T_USER_AGENT = [
@@ -23,11 +25,13 @@ class UrlGrabber
 	const N_USER_AGENT = 7;
 
 	private $target = '';
+	private $t_default = [ 3=>1, 9=>1, ];
 	
 	private $tor = false;
 	private $malicious = false;
 	private $assets = true;
 	private $https = false;
+	private $looping = true;
 	
 	private $t_urls = [];
 
@@ -45,6 +49,14 @@ class UrlGrabber
 	
 	public function enableTor() {
 		$this->tor = true;
+	}
+	
+	
+	public function enableLooping() {
+		$this->looping = true;
+	}
+	public function disableLooping() {
+		$this->looping = false;
 	}
 	
 	
@@ -86,27 +98,36 @@ class UrlGrabber
 		}
 		$this->t_sources[ $index ] = $v;
 		//ksort( $this->t_sources );
-		$this->t_run[] = $v;
-		return true;;
+		$this->t_run[ $index ] = [ 'index'=>$index, 'class'=>$v, 'params'=>(isset($this->t_default[$index])?$this->t_default[$index]:'') ];
+		return true;
 	}
 	public function setSource( $v ) {
 		$tmp = explode( ',', $v );
 		$this->t_run = [];
+		$this->disableLooping();
 		foreach( $tmp as $s ) {
+			if( strlen($s) > 1 ) {
+				$this->t_default[ $s[0] ] = $s[1];
+				$s = $s[0];
+			}
 			if( !isset($this->t_sources[$s]) ) {
 				Utils::help( $s.' source not found' );
 			}
-			$this->t_run[] = $this->t_sources[ $s ];
+			$this->t_run[ $s ] = [ 'index'=>$s, 'class'=>$this->t_sources[$s], 'params'=>(isset($this->t_default[$s])?$this->t_default[$s]:'') ];
 		}
 	}
 	
 	
 	public function run()
 	{
-		foreach( $this->t_run as $s ) {
-			$class = $s;
-			echo "Testing ".$class::SOURCE_NAME."...\n";
-			$t_urls = $class::run( $this->target, $this->tor, $this->malicious, $this->https );
+		foreach( $this->t_run as $index=>$source ) {
+			if( $index == self::LOOPING_INDEX ) {
+				$this->enableLooping();
+				// skipping looping for the moment
+				continue;
+			}
+			echo "Testing ".$source['class']::SOURCE_NAME."...\n";
+			$t_urls = $source['class']::run( $this->target, $this->tor, $this->malicious, $this->https, $source['params'] );
 			$t_urls = array_unique( $t_urls );
 			if( !$this->assets ) {
 				$t_urls = $this->removeAssets( $t_urls );
@@ -117,12 +138,21 @@ class UrlGrabber
 			echo "\n";
 		}
 		
-		return true;
-		
-		$this->t_urls = array_unique( $this->t_urls );
-		
-		if( !$this->assets ) {
-			$this->removeAssets( $this->t_urls );
+		if( $this->looping && $this->t_run[self::LOOPING_INDEX]['params'] ) {
+			$t_urls = $this->t_urls;
+			for( $i=1 ; $i<=$this->t_run[self::LOOPING_INDEX]['params'] && count($t_urls) ; $i++ ) {
+				echo "Looping ".$i."...\n";
+				$t_urls = SourceLoop::run( $this->target, $this->tor, $this->malicious, $this->https, $this->t_run[self::LOOPING_INDEX]['params'], $t_urls );
+				$t_urls = array_unique( $t_urls );
+				if( !$this->assets ) {
+					$t_urls = $this->removeAssets( $t_urls );
+				}
+				$t_urls = array_diff( $t_urls, $this->t_urls );
+				$this->t_urls = array_merge( $this->t_urls, $t_urls );
+				echo count( $t_urls )." new urls found.\n\n";
+				$this->printUrls( $t_urls );
+				echo "\n";
+			}
 		}
 
 		return true;
@@ -133,6 +163,7 @@ class UrlGrabber
 	{
 		foreach( $t_urls as $k=>$u ) {
 			$parse = parse_url( $u );
+			//var_dump($parse);
 			//var_dump( $parse['path'] );
 			if( strstr($parse['path'],'.') ) {
 				$ext = substr( $parse['path'], strrpos($parse['path'],'.')+1 );
