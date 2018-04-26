@@ -6,13 +6,13 @@ Note that this is an automated tool, manual check is still required.
 Usage: php urlgrabber.php [OPTIONS] --target <target>
 
 Options:
+	--dork		specify the Google dork used by Lynx and INURLBR, default='site:<source>'
 	-h, --help	print this help
 	--https		force https
-	--dork		specify the Google dork used by Lynx and INURLBR, default='site:<source>'
 	--no-assets	exclude assets
 	--source	source to use, default=all
 	--target	targeted website
-	--tor		use tor (torsocks requires)
+	--tor		use tor (torsocks required)
 
 Examples:
 	php urlgrabber.php --target <www.example.com>
