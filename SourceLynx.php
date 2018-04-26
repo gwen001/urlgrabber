@@ -11,16 +11,10 @@ class SourceLynx
 	const SOURCE_NAME = 'Lynx';
 
 
-	public static function run( $target, $tor, $malicious, $https, $params )
+	public static function run( $target, $tor, $dork, $https, $params )
 	{
-		if( $malicious ) {
-			$dork = 'site%3A'.$target.'+inurl%3A"&"';
-		} else {
-			$dork = 'site%3A'.$target;
-		}
-		
 		$t_urls = [];
-		$cmd = 'lynx -useragent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -listonly -dump http://www.google.com/search?q='.$dork.'&start=0&num=1000';
+		$cmd = 'lynx -useragent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -listonly -dump \'http://www.google.com/search?q='.$dork.'&start=0&num=1000\'';
 		if( $tor ) {
 			$cmd = 'torsocks '.$cmd;
 		}

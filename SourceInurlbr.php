@@ -11,17 +11,13 @@ class SourceInurlbr
 	const SOURCE_NAME = 'INURLBR';
 
 
-	public static function run( $target, $tor, $malicious, $https, $params )
+	public static function run( $target, $tor, $dork, $https, $params )
 	{
 		$tmpfile = '../../../../../../../../../../'.tempnam( '/tmp', 'ug_' );
 		$dorkfile = '../../../../../../../../../../'.tempnam( '/tmp', 'ug_' );
 		echo $dorkfile."\n";
 		
-		if( $malicious ) {
-			file_put_contents( $dorkfile, 'site:'.$target.' inurl:"&"' );
-		} else {
-			file_put_contents( $dorkfile, 'site:'.$target );
-		}
+		file_put_contents( $dorkfile, $dork );
 
 		$t_urls = [];
 		//$cmd = 'inurlbr '.($tor?'--tor-random':'').' --user-agent "'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" --no-banner --dork-file '.$dorkfile.' --sall '.$tmpfile.' -q 1,6 --mp 200';

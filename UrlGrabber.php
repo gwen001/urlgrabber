@@ -23,12 +23,13 @@ class UrlGrabber
 		'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
 	];
 	const N_USER_AGENT = 7;
+	const DEFAULT_DORK = 'site:__TARGET__';
 
 	private $target = '';
 	private $t_default = [ 3=>1, 9=>1, ];
 	
 	private $tor = false;
-	private $malicious = false;
+	private $dork = null;
 	private $assets = true;
 	private $https = false;
 	private $looping = true;
@@ -43,7 +44,21 @@ class UrlGrabber
 		return $this->target;
 	}
 	public function setTarget( $v ) {
-		return $this->target = trim( $v );
+		$this->target = trim( $v );
+		if( is_null($this->dork) ) {
+			$this->dork = str_replace( '__TARGET__', $this->target, self::DEFAULT_DORK );
+		}
+		return true;
+	}
+
+	
+	public function getDork() {
+		return $this->dork;
+	}
+	public function setDork( $v ) {
+		$this->dork = Utils::encodeDork( trim($v) );
+		$this->dork = str_replace( '__TARGET__', $this->target, $this->dork );
+		return true;
 	}
 
 	
@@ -127,7 +142,7 @@ class UrlGrabber
 				continue;
 			}
 			echo "Testing ".$source['class']::SOURCE_NAME."...\n";
-			$t_urls = $source['class']::run( $this->target, $this->tor, $this->malicious, $this->https, $source['params'] );
+			$t_urls = $source['class']::run( $this->target, $this->tor, $this->dork, $this->https, $source['params'] );
 			$t_urls = array_unique( $t_urls );
 			if( !$this->assets ) {
 				$t_urls = $this->removeAssets( $t_urls );
@@ -142,7 +157,7 @@ class UrlGrabber
 			$t_urls = $this->t_urls;
 			for( $i=1 ; $i<=$this->t_run[self::LOOPING_INDEX]['params'] && count($t_urls) ; $i++ ) {
 				echo "Looping ".$i."...\n";
-				$t_urls = SourceLoop::run( $this->target, $this->tor, $this->malicious, $this->https, $this->t_run[self::LOOPING_INDEX]['params'], $t_urls );
+				$t_urls = SourceLoop::run( $this->target, $this->tor, $this->dork, $this->https, $this->t_run[self::LOOPING_INDEX]['params'], $t_urls );
 				$t_urls = array_unique( $t_urls );
 				if( !$this->assets ) {
 					$t_urls = $this->removeAssets( $t_urls );

@@ -8,11 +8,11 @@ Usage: php urlgrabber.php [OPTIONS] --target <target>
 Options:
 	-h, --help	print this help
 	--https		force https
-	--malicious	enable malicious search, urls (with parameters) containing "&" or "?"
+	--dork		specify the Google dork used by Lynx and INURLBR, default='site:<source>'
 	--no-assets	exclude assets
 	--source	source to use, default=all
 	--target	targeted website
-	--tor		use tor (must be installed and enabled)
+	--tor		use tor (torsocks requires)
 
 Examples:
 	php urlgrabber.php --target <www.example.com>

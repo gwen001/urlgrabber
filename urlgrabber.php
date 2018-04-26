@@ -14,49 +14,53 @@ function __autoload( $c ) {
 
 // parse command line
 {
+	$options = [
+		'dork:',
+		'https',
+		'no-assets',
+		'source:',
+		'target:',
+		'tor',
+	];
+	$t_options = getopt( '', $options );
+	//var_dump( $t_options );
+
 	$grabber = new UrlGrabber();
 	$grabber->registerSource( 1, 'SourceLynx' );
 	$grabber->registerSource( 2, 'SourceInurlbr' );
 	$grabber->registerSource( 3, 'SourceWget' );
 	$grabber->registerSource( 9, 'SourceLoop' );
 
-	$argc = $_SERVER['argc'] - 1;
-
-	for ($i = 1; $i <= $argc; $i++) {
-		switch ($_SERVER['argv'][$i]) {
-			case '-h':
-			case '--help':
-				Utils::help();
+	foreach( $t_options as $k=>$v )
+	{
+		switch( $k )
+		{
+			case 'dork':
+				$grabber->setDork( $v );
 				break;
 
-			case '--https':
+			case 'https':
 				$grabber->enableHttps();
 				break;
 
-			case '--malicious':
-				$grabber->enableMaliciousSearch();
-				break;
-
-			case '--no-assets':
+			case 'no-assets':
 				$grabber->excludeAssets();
 				break;
 
-			case '--source':
-				$grabber->setSource($_SERVER['argv'][$i + 1]);
-				$i++;
+			case 'source':
+				$grabber->setSource( $v );
 				break;
 
-			case '--target':
-				$grabber->setTarget($_SERVER['argv'][$i + 1]);
-				$i++;
+			case 'target':
+				$grabber->setTarget( $v );
 				break;
 
-			case '--tor':
+			case 'tor':
 				$grabber->enableTor();
 				break;
 
 			default:
-				Utils::help('Unknown option: '.$_SERVER['argv'][$i]);
+				Utils::help( 'Unknown option: '.$k );
 		}
 	}
 
