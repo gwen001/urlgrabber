@@ -33,6 +33,7 @@ class UrlGrabber
 	private $assets = true;
 	private $https = false;
 	private $looping = true;
+	private $verbose = 0;
 	
 	private $t_urls = [];
 
@@ -46,7 +47,9 @@ class UrlGrabber
 	public function setTarget( $v ) {
 		$this->target = trim( $v );
 		if( is_null($this->dork) ) {
-			$this->dork = str_replace( '__TARGET__', $this->target, self::DEFAULT_DORK );
+			$this->_dork = self::DEFAULT_DORK;
+			$this->_dork = Utils::encodeDork( $this->dork );
+			$this->dork = str_replace( '__TARGET__', $this->target, $this->dork );
 		}
 		return true;
 	}
@@ -56,8 +59,18 @@ class UrlGrabber
 		return $this->dork;
 	}
 	public function setDork( $v ) {
-		$this->dork = Utils::encodeDork( trim($v) );
-		$this->dork = str_replace( '__TARGET__', $this->target, $this->dork );
+		$this->dork = trim( $v );
+		$this->_dork = Utils::encodeDork( $this->dork );
+		$this->_dork = str_replace( '__TARGET__', $this->target, $this->_dork );
+		return true;
+	}
+	
+	
+	public function getVerbose() {
+		return $this->verbose;
+	}
+	public function setVerbose( $v ) {
+		$this->verbose = (int)$v;
 		return true;
 	}
 
@@ -135,29 +148,39 @@ class UrlGrabber
 	
 	public function run()
 	{
-		foreach( $this->t_run as $index=>$source ) {
+		foreach( $this->t_run as $index=>$source )
+		{
 			if( $index == self::LOOPING_INDEX ) {
 				$this->enableLooping();
 				// skipping looping for the moment
 				continue;
 			}
-			echo "Testing ".$source['class']::SOURCE_NAME."...\n";
-			$t_urls = $source['class']::run( $this->target, $this->tor, $this->dork, $this->https, $source['params'] );
+			
+			if( $this->verbose <= 0 ) {
+				echo "Testing ".$source['class']::SOURCE_NAME."...\n";
+			}
+			$t_urls = $source['class']::run( $this->target, $this->tor, $this->_dork, $this->https, $source['params'], $this->verbose );
 			$t_urls = array_unique( $t_urls );
 			if( !$this->assets ) {
 				$t_urls = $this->removeAssets( $t_urls );
 			}
+			
 			$this->t_urls = array_merge( $this->t_urls, $t_urls );
-			echo count( $t_urls )." urls found.\n\n";
+			if( $this->verbose <= 0 ) {
+				echo count( $t_urls )." urls found.\n\n";
+			}
 			$this->printUrls( $t_urls );
 			echo "\n";
 		}
 		
-		if( $this->looping && $this->t_run[self::LOOPING_INDEX]['params'] ) {
+		if( $this->looping && $this->t_run[self::LOOPING_INDEX]['params'] )
+		{
 			$t_urls = $this->t_urls;
-			for( $i=1 ; $i<=$this->t_run[self::LOOPING_INDEX]['params'] && count($t_urls) ; $i++ ) {
+			
+			for( $i=1 ; $i<=$this->t_run[self::LOOPING_INDEX]['params'] && count($t_urls) ; $i++ )
+			{
 				echo "Looping ".$i."...\n";
-				$t_urls = SourceLoop::run( $this->target, $this->tor, $this->dork, $this->https, $this->t_run[self::LOOPING_INDEX]['params'], $t_urls );
+				$t_urls = SourceLoop::run( $this->target, $this->tor, $this->dork, $this->https, $this->t_run[self::LOOPING_INDEX]['params'], $t_urls, $this->verbose );
 				$t_urls = array_unique( $t_urls );
 				if( !$this->assets ) {
 					$t_urls = $this->removeAssets( $t_urls );

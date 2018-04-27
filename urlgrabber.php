@@ -21,6 +21,7 @@ function __autoload( $c ) {
 		'source:',
 		'target:',
 		'tor',
+		'verbose:',
 	];
 	$t_options = getopt( '', $options );
 	//var_dump( $t_options );
@@ -29,6 +30,7 @@ function __autoload( $c ) {
 	$grabber->registerSource( 1, 'SourceLynx' );
 	$grabber->registerSource( 2, 'SourceInurlbr' );
 	$grabber->registerSource( 3, 'SourceWget' );
+	$grabber->registerSource( 4, 'SourceWayback' );
 	$grabber->registerSource( 9, 'SourceLoop' );
 
 	foreach( $t_options as $k=>$v )
@@ -57,6 +59,10 @@ function __autoload( $c ) {
 
 			case 'tor':
 				$grabber->enableTor();
+				break;
+
+			case 'verbose':
+				$grabber->setVerbose( $v );
 				break;
 
 			default:

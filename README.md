@@ -13,6 +13,7 @@ Options:
 	--source	source to use, default=all
 	--target	targeted website
 	--tor		use tor (torsocks required)
+	--verbose	0=all, 1=remove extra text
 
 Examples:
 	php urlgrabber.php --target <www.example.com>
@@ -23,7 +24,8 @@ Available sources are:
 	1. Google via Lynx
 	2. Google via INURLBR
 	3x. Wget, x=depth, default=1
-	9x. Loop, will check the source code of urls found to try to get new urls, x=how many loops, default=1
+	4. Waybackurls
+	9x. Loop, will check the source code of urls found to try to get new urls, x=how many loops, default=1 (not implemented yet)
 ```
 
 I don't believe in license.  

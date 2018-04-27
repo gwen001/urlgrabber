@@ -13,16 +13,11 @@ class SourceInurlbr
 
 	public static function run( $target, $tor, $dork, $https, $params )
 	{
-		$tmpfile = '../../../../../../../../../../'.tempnam( '/tmp', 'ug_' );
-		$dorkfile = '../../../../../../../../../../'.tempnam( '/tmp', 'ug_' );
-		echo $dorkfile."\n";
+		$tmpfile = tempnam( '/tmp', '' );
 		
-		file_put_contents( $dorkfile, $dork );
-
 		$t_urls = [];
-		//$cmd = 'inurlbr '.($tor?'--tor-random':'').' --user-agent "'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" --no-banner --dork-file '.$dorkfile.' --sall '.$tmpfile.' -q 1,6 --mp 200';
-		$cmd = 'inurlbr '.($tor?'--tor-random':'').' --user-agent "'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" --no-banner --dork "site:'.$target.'" -s '.$tmpfile.' -q 1,6 --mp 200';
-		echo $cmd."\n";
+		$cmd = 'inurlbr '.($tor?'--tor-random':'').' --user-agent "'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" --no-banner --dork "'.$dork.'" -s '.$tmpfile.' -q 1 --mp 200';
+		//echo $cmd."\n";
 		//exit();
 		exec( $cmd, $output );
 		//$tmpfile = 'inurlbr.txt';
@@ -62,15 +57,14 @@ class SourceInurlbr
 				unset( $t_urls[$k] );
 			}
 			
-			if( $malicious && !strstr($url,"?") ) {
+			/*if( $malicious && !strstr($url,"?") ) {
 				unset( $t_urls[$k] );
-			}
+			}*/
 		}
 		//var_dump( $t_urls );
 		//exit();
 		
 		@unlink( $tmpfile );
-		@unlink( $dorkfile );
 
 		return $t_urls;
 	}

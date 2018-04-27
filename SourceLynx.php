@@ -11,14 +11,16 @@ class SourceLynx
 	const SOURCE_NAME = 'Lynx';
 
 
-	public static function run( $target, $tor, $dork, $https, $params )
+	public static function run( $target, $tor, $dork, $https, $params, $verbose )
 	{
 		$t_urls = [];
-		$cmd = 'lynx -useragent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -listonly -dump \'http://www.google.com/search?q='.$dork.'&start=0&num=1000\'';
+		$cmd = 'lynx -useragent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -listonly -dump "http://www.google.com/search?q='.$dork.'&start=0&num=1000" 2>/dev/null';
 		if( $tor ) {
 			$cmd = 'torsocks '.$cmd;
 		}
-		echo $cmd."\n";
+		if( $verbose <= 0 ) {
+			echo $cmd."\n";
+		}
 		exec( $cmd, $output );
 		$output = implode( "\n", $output );
 		//file_put_contents( 'lynx.txt', $output );

@@ -11,7 +11,7 @@ class SourceLoop
 	const SOURCE_NAME = 'Loop';
 
 
-	public static function run( $target, $tor, $malicious, $https, $params, $t_urls )
+	public static function run( $target, $tor, $dork, $https, $params, $t_urls )
 	{
 		foreach( $t_urls as $source )
 		{
@@ -56,13 +56,13 @@ class SourceLoop
 						unset( $t_news[$k] );
 					}
 					
-					if( $malicious && !strstr($url,"?") ) {
+					/*if( $run && !strstr($url,"?") ) {
 						unset( $t_news[$k] );
-					}
+					}*/
 				}
 			}
 		}
-		//var_dump( $t_urls );
+		var_dump( $matches );
 		//exit();
 
 		return $t_news;
