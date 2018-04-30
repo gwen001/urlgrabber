@@ -10,6 +10,7 @@ Options:
 	-h, --help	print this help
 	--https		force https
 	--no-assets	exclude assets
+	--only-params	exclude urls without any parameter
 	--source	source to use, default=all
 	--target	targeted website
 	--tor		use tor (torsocks required)

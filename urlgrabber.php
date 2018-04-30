@@ -18,6 +18,7 @@ function __autoload( $c ) {
 		'dork:',
 		'https',
 		'no-assets',
+		'only-params',
 		'source:',
 		'target:',
 		'tor',
@@ -47,6 +48,10 @@ function __autoload( $c ) {
 
 			case 'no-assets':
 				$grabber->excludeAssets();
+				break;
+
+			case 'only-params':
+				$grabber->excludeNoParams();
 				break;
 
 			case 'source':

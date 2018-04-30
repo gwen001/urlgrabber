@@ -10,7 +10,7 @@ class UrlGrabber
 {
 	const LOOPING_INDEX = 9;
 	
-	const T_ASSETS_EXTENSIONS = [ 'js', 'css', 'woff', 'woff2', 'eot', 'pdf', 'png', 'ico', 'gif', 'jpg', 'jpeg', 'bmp', 'txt', 'csv', 'pdf', 'xml', 'mp3', 'mpg', 'mpeg', 'avi', 'mov' ];
+	const T_ASSETS_EXTENSIONS = [ 'js', 'css', 'woff', 'woff2', 'eot', 'pdf', 'png', 'ico', 'gif', 'jpg', 'jpeg', 'bmp', 'txt', 'csv', 'pdf', 'xml', 'mp3', 'mpg', 'mpeg', 'avi', 'mov', 'wmv', 'doc', 'xls' ];
 	
 	const T_USER_AGENT = [
 		'Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.7.0',
@@ -31,6 +31,7 @@ class UrlGrabber
 	private $tor = false;
 	private $dork = null;
 	private $assets = true;
+	private $no_params = false;
 	private $https = false;
 	private $looping = true;
 	private $verbose = 0;
@@ -98,6 +99,11 @@ class UrlGrabber
 	}
 	
 	
+	public function excludeNoParams() {
+		$this->no_params = true;
+	}
+	
+	
 	public function enableHttps() {
 		$this->https = true;
 	}
@@ -159,8 +165,12 @@ class UrlGrabber
 			if( $this->verbose <= 0 ) {
 				echo "Testing ".$source['class']::SOURCE_NAME."...\n";
 			}
-			$t_urls = $source['class']::run( $this->target, $this->tor, $this->_dork, $this->https, $source['params'], $this->verbose );
-			$t_urls = array_unique( $t_urls );
+			//$t_urls = $source['class']::run( $this->target, $this->tor, $this->_dork, $this->https, $source['params'], $this->verbose );
+			//$t_urls = array_unique( $t_urls );
+			$t_urls= [ 'http://10degres.net/aaaaA.php', 'http://10degres.net/qsqs.php?a=b' ];
+			if( $this->no_params ) {
+				$t_urls = $this->removeNoParams( $t_urls );
+			}
 			if( !$this->assets ) {
 				$t_urls = $this->removeAssets( $t_urls );
 			}
@@ -182,6 +192,9 @@ class UrlGrabber
 				echo "Looping ".$i."...\n";
 				$t_urls = SourceLoop::run( $this->target, $this->tor, $this->dork, $this->https, $this->t_run[self::LOOPING_INDEX]['params'], $t_urls, $this->verbose );
 				$t_urls = array_unique( $t_urls );
+				if( $this->no_params ) {
+					$t_urls = $this->removeNoParams( $t_urls );
+				}
 				if( !$this->assets ) {
 					$t_urls = $this->removeAssets( $t_urls );
 				}
@@ -194,6 +207,20 @@ class UrlGrabber
 		}
 
 		return true;
+	}
+	
+	
+	public function removeNoParams( $t_urls )
+	{
+		foreach( $t_urls as $k=>$u ) {
+			$parse = parse_url( $u );
+			//var_dump($parse);
+			if( !isset($parse['query']) ) {
+				unset( $t_urls[$k] );
+			}
+		}
+		
+		return $t_urls;
 	}
 	
 	
