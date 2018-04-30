@@ -230,9 +230,9 @@ class UrlGrabber
 			//var_dump($parse);
 			//var_dump( $parse['path'] );
 			if( strstr($parse['path'],'.') ) {
-				$ext = substr( $parse['path'], strrpos($parse['path'],'.')+1 );
+				$ext = strtolower( substr( $parse['path'], strrpos($parse['path'],'.')+1 ) );
 				//var_dump($ext);
-				if( in_array($ext,self::T_ASSETS_EXTENSIONS) ) {
+				if( in_array($ext,self::T_ASSETS_EXTENSIONS) || in_array(strtoupper($ext),self::T_ASSETS_EXTENSIONS) ) {
 					unset( $t_urls[$k] );
 				}
 			}
