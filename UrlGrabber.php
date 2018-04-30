@@ -165,9 +165,8 @@ class UrlGrabber
 			if( $this->verbose <= 0 ) {
 				echo "Testing ".$source['class']::SOURCE_NAME."...\n";
 			}
-			//$t_urls = $source['class']::run( $this->target, $this->tor, $this->_dork, $this->https, $source['params'], $this->verbose );
-			//$t_urls = array_unique( $t_urls );
-			$t_urls= [ 'http://10degres.net/aaaaA.php', 'http://10degres.net/qsqs.php?a=b' ];
+			$t_urls = $source['class']::run( $this->target, $this->tor, $this->_dork, $this->https, $source['params'], $this->verbose );
+			$t_urls = array_unique( $t_urls );
 			if( $this->no_params ) {
 				$t_urls = $this->removeNoParams( $t_urls );
 			}
