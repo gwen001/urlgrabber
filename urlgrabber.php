@@ -86,6 +86,7 @@ function __autoload( $c ) {
 {
 	$grabber->run();
 	//$grabber->printResult();
+	echo "\nThe end.\n";
 }
 // ---
 
