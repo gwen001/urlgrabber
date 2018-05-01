@@ -57,7 +57,7 @@ echo "########### 0: Looking for new domains with same extension: ".$_tld."\n";
 $t_regexp = [ '#[^a-z0-9\\.\-]+([a-z0-9\\.\-]+\.'.$_tld.')#' ];
 foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
-	//echo $cmd."\n";
+	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
@@ -71,7 +71,7 @@ echo "########### 1: Looking for new subdomains of the same domain: ".$_domain."
 $t_regexp = [ '#[^a-z0-9\\.\-]+([a-z0-9\\.\-]+\.'.str_replace('.','\.',$_domain).')#' ];
 foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
-	//echo $cmd."\n";
+	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
@@ -85,7 +85,7 @@ echo "########### 2: Looking for absolute urls within the same subdomain: ".$_su
 $t_regexp = [ "#[^a-z0-9\.\-]+(([a-z]{3,15}:[/]{2,3}){0,1}".str_replace('.','\.',$_subdomain)."/[^'\\\"]+)#" ];
 foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -s -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
-	//echo $cmd."\n";
+	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
@@ -100,6 +100,7 @@ $output = '';
 $t_regexp = [ "(href=['\\\\\\\"]+[^\\\\\\\"'>]*['\\\\\\\"])", "(src=['\\\\\\\"]+[^\\\\\\\"'>]*['\\\\\\\"])" ];
 foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -k -s -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
+	echo '### '.$cmd."\n";
 	exec( $cmd, $o );
 	$output .= trim( implode( "\n", $o ) );
 }
@@ -132,7 +133,7 @@ $t_regexp = [
 ];
 foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
-	//echo $cmd."\n";
+	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
@@ -150,7 +151,7 @@ $t_regexp = [
 ];
 foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
-	//echo $cmd."\n";
+	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
@@ -162,7 +163,7 @@ echo "######################\n\n";
 
 echo "########### 6: Looking for keys\n";
 $cmd = 'extract-endpoints -k -r -d '.$_directory.' -v 1 -e "*" -i "'.$t_ignore_ext.'"';
-//echo $cmd."\n";
+echo '### '.$cmd."\n";
 exec( $cmd, $output );
 $output = trim( implode( "\n", $output ) );
 if( strlen($output) ) {
@@ -171,4 +172,5 @@ if( strlen($output) ) {
 echo "######################\n\n";
 
 
+echo "\nThe end.\n";
 exit();
