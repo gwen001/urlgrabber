@@ -10,17 +10,21 @@ class SourceWget
 {
 	const SOURCE_NAME = 'Wget';
 	
-	const OUTPUT_DIR = '/tmp';
+	const OUTPUT_DIR = '/var/www';
 
-	const T_IGNORE = ['ico','gif','jpg','jpeg','png','bmp','svg','avi','mpg','mpeg','mp3','woff','woff2','ttf','eot'];
+	const T_IGNORE = ['ico','gif','jpg','jpeg','png','bmp','svg','avi','mpg','mpeg','mp3','woff','woff2','ttf','eot', 'mp3','mpg','mpeg','avi','mov','wmv','doc','xls','pdf' ];
 	
-
+	const TIMEOUT = 5;
+	
+	const TRIES = 5;
+	
+	
 	public static function run( $target, $tor, $dork, $https, $params, $verbose )
 	{
 		$t_urls = [];
 		$domain = Utils::extractDomain( $target );
 		$tmpfile = tempnam( '/tmp', 'ug_' );
-		$cmd = 'wget --no-check-certificate --random-wait --user-agent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -r -l'.$params.' -D '.$domain.' http'.($https?'s':'').'://'.$target.'/ -o '.$tmpfile.' -R '.implode(self::T_IGNORE,',').' -P '.self::OUTPUT_DIR.' 2>/dev/null';
+		$cmd = 'wget --no-check-certificate --random-wait --user-agent="'.UrlGrabber::T_USER_AGENT[rand(0,UrlGrabber::N_USER_AGENT)].'" -r -l'.$params.' -D '.$domain.' http'.($https?'s':'').'://'.$target.'/ -o '.$tmpfile.' -R '.implode(self::T_IGNORE,',').' -P '.self::OUTPUT_DIR.' --timeout='.self::TIMEOUT.' --tries='.self::TRIES.' 2>/dev/null';
 		if( $tor ) {
 			$cmd = 'torsocks '.$cmd;
 		}

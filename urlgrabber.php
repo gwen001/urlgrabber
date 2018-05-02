@@ -19,6 +19,7 @@ function __autoload( $c ) {
 		'https',
 		'no-assets',
 		'only-params',
+		'port:',
 		'source:',
 		'target:',
 		'tor',
@@ -56,6 +57,10 @@ function __autoload( $c ) {
 
 			case 'source':
 				$grabber->setSource( $v );
+				break;
+
+			case 'port':
+				$grabber->setPort( $v );
 				break;
 
 			case 'target':

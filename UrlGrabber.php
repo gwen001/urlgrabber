@@ -10,7 +10,7 @@ class UrlGrabber
 {
 	const LOOPING_INDEX = 9;
 	
-	const T_ASSETS_EXTENSIONS = [ 'js', 'css', 'woff', 'woff2', 'eot', 'pdf', 'png', 'ico', 'gif', 'jpg', 'jpeg', 'bmp', 'txt', 'csv', 'pdf', 'xml', 'mp3', 'mpg', 'mpeg', 'avi', 'mov', 'wmv', 'doc', 'xls' ];
+	const T_ASSETS_EXTENSIONS = [ 'js', 'css', 'woff', 'woff2', 'eot', 'ttf', 'pdf', 'svg', 'png', 'ico', 'gif', 'jpg', 'jpeg', 'bmp', 'txt', 'csv', 'pdf', 'xml', 'mp3', 'mpg', 'mpeg', 'avi', 'mov', 'wmv', 'doc', 'xls' ];
 	
 	const T_USER_AGENT = [
 		'Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.7.0',
