@@ -12,7 +12,7 @@ class SourceWget
 	
 	const OUTPUT_DIR = '/var/www';
 
-	const T_IGNORE = ['ico','gif','jpg','jpeg','png','bmp','svg','avi','mpg','mpeg','mp3','woff','woff2','ttf','eot', 'mp3','mpg','mpeg','avi','mov','wmv','doc','xls','pdf' ];
+	const T_IGNORE = ['ico','gif','jpg','jpeg','png','bmp','svg','avi','mpg','mpeg','mp3','woff','woff2','ttf','eot','mp3','mp4','mpg','mpeg','avi','mov','wmv','doc','xls','pdf' ];
 	
 	const TIMEOUT = 5;
 	

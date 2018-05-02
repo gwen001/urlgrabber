@@ -4,7 +4,9 @@
 function usage( $err=null ) {
 	echo 'Usage: php '.$_SERVER['argv'][0]." -d <directory> -s <subdomain>\n\n";
 	echo "Options:\n";
+	echo "\t-a\tno assets\n";
 	echo "\t-d\tset source directory (required)\n";
+	echo "\t-p\tremove urls without any parameters\n";
 	echo "\t-s\tsubdomain\n";
 	echo "\n";
 	if( $err ) {
@@ -13,12 +15,16 @@ function usage( $err=null ) {
 	exit();
 }
 
+define( 'T_ASSETS_EXTENSIONS', ['js','css','woff','woff2','eot','ttf','pdf','svg','png','ico','gif','jpg','jpeg','bmp','txt','csv','pdf','xml','mp3','mp4','mpg','mpeg','avi','mov','wmv','doc','xls'] );
+
 
 require_once( 'Utils.php' );
 
 
 $options = '';
+$options .= 'a'; // no assets
 $options .= 'd:'; // source directory
+$options .= 'p'; // only urls with params
 $options .= 's:'; // subdomain
 $t_options = getopt( $options );
 //var_dump($t_options);
@@ -41,6 +47,18 @@ if( isset($t_options['s']) ) {
 	$_domain = Utils::extractDomain( $_subdomain, $_tld );
 } else {
 	usage( 'Subdomain not found' );
+}
+
+if( isset($t_options['a']) ) {
+	$_assets = false;
+} else {
+	$_assets = true;
+}
+
+if( isset($t_options['p']) ) {
+	$_only_params = true;
+} else {
+	$_only_params = false;
 }
 
 
@@ -89,13 +107,20 @@ foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -s -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
 	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
+	if( !$_assets ) {
+		$output = removeAssets( $output );
+	}
+	if( $_only_params ) {
+		$output = removeNoParams( $output );
+	}
+	$output = array_unique( $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
 		echo trim($output)."\n";
 	}
 }
 echo "######################\n\n";
-
+exit();
 
 echo "########### 3: Looking for relative urls within the same subdomain: ".$_subdomain."\n";
 $output = '';
@@ -123,7 +148,15 @@ foreach( $t_matches as &$m ) {
 	}
     //echo $m."\n";
 }
+
+if( !$_assets ) {
+	$t_matches = removeAssets( $t_matches );
+}
+if( $_only_params ) {
+	$t_matches = removeNoParams( $t_matches );
+}
 $t_matches = array_unique( $t_matches );
+
 echo implode( "\n", $t_matches );
 echo "######################\n\n";
 
@@ -178,3 +211,37 @@ echo "######################\n\n";
 
 echo "\nThe end.\n";
 exit();
+
+
+function removeAssets( $t_urls )
+{
+	foreach( $t_urls as $k=>$u ) {
+		$parse = parse_url( $u );
+		//var_dump($parse);
+		//var_dump( $parse['path'] );
+		if( strstr($parse['path'],'.') ) {
+			$ext = strtolower( substr( $parse['path'], strrpos($parse['path'],'.')+1 ) );
+			//var_dump($ext);
+			if( in_array($ext,T_ASSETS_EXTENSIONS) || in_array(strtoupper($ext),T_ASSETS_EXTENSIONS) ) {
+				unset( $t_urls[$k] );
+			}
+		}
+	}
+	
+	return $t_urls;
+}
+
+
+function removeNoParams( $t_urls )
+{
+	foreach( $t_urls as $k=>$u ) {
+		$parse = parse_url( $u );
+		//var_dump($parse);
+		if( !isset($parse['query']) ) {
+			unset( $t_urls[$k] );
+		}
+	}
+	
+	return $t_urls;
+}
+
