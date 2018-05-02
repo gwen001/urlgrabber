@@ -59,6 +59,7 @@ foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
 	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
+	$output = array_unique( $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
 		echo trim($output)."\n";
@@ -73,6 +74,7 @@ foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
 	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
+	$output = array_unique( $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
 		echo trim($output)."\n";
@@ -135,6 +137,7 @@ foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
 	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
+	$output = array_unique( $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
 		echo trim($output)."\n";
@@ -153,6 +156,7 @@ foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
 	echo '### '.$cmd."\n";
 	exec( $cmd, $output );
+	$output = array_unique( $output );
 	$output = trim( implode( "\n", $output ) );
 	if( strlen($output) ) {
 		echo trim($output)."\n";
@@ -160,7 +164,7 @@ foreach( $t_regexp as $r ) {
 }
 echo "######################\n\n";
 
-
+/*
 echo "########### 6: Looking for keys\n";
 $cmd = 'extract-endpoints -k -r -d '.$_directory.' -v 1 -e "*" -i "'.$t_ignore_ext.'"';
 echo '### '.$cmd."\n";
@@ -170,7 +174,7 @@ if( strlen($output) ) {
 	echo trim($output)."\n";
 }
 echo "######################\n\n";
-
+*/
 
 echo "\nThe end.\n";
 exit();
