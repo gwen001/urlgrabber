@@ -26,6 +26,7 @@ Available sources are:
 	2. Google via INURLBR
 	3x. Wget, x=depth, default=1
 	4. Waybackurls
+	5. Google via custom grabber
 	9x. Loop, will check the source code of urls found to try to get new urls, x=how many loops, default=1 (not implemented yet)
 ```
 
