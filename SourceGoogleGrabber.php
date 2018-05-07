@@ -14,7 +14,7 @@ class SourceGoogleGrabber
 	public static function run( $target, $tor, $dork, $https, $params, $verbose )
 	{
 		$t_urls = [];
-		$cmd = './ggrab.py \''.urldecode($dork).'\' 2>/dev/null';
+		$cmd = __DIR__.'/ggrab.py \''.urldecode($dork).'\' 2>/dev/null';
 		if( $tor ) {
 			$cmd = 'torsocks '.$cmd;
 		}
