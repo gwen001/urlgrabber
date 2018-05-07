@@ -23,4 +23,4 @@ json_results = query.get_json()
 
 for r in json_results['organic_results']:
     #print( "{}. {}".format(r['position'],r['link']) )
-    print( "{}. {}".format(r['position'],r['link']) )
+    print( "{}".format(r['link']) )
