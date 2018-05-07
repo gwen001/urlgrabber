@@ -7,7 +7,7 @@ from lib.google_search_results import GoogleSearchResults
 
 params = {
     "q" : sys.argv[1],
-    "num" : "100",
+    "num" : "1000",
     "location" : "Austin, Texas, United States",
     "hl" : "en",
     "gl" : "us",
