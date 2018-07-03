@@ -18,7 +18,7 @@ function usage( $err=null ) {
 define( 'T_ASSETS_EXTENSIONS', ['js','css','woff','woff2','eot','ttf','pdf','svg','png','ico','gif','jpg','jpeg','bmp','txt','csv','pdf','xml','mp3','mp4','mpg','mpeg','avi','mov','wmv','doc','xls'] );
 
 
-require_once( 'Utils.php' );
+require_once( __DIR__.'/Utils.php' );
 
 
 $options = '';
@@ -184,6 +184,24 @@ $t_regexp = [
 	'#[^a-z0-9\\.\-]+([a-z0-9\\.\-]+\.storage\.googleapis\.com)#',
 	'#[^a-z0-9\\.\-]+(storage\.googleapis\.com/[a-z0-9\\.\-]+)#',
 	'#[^a-z0-9\\.\-]+(storage\.cloud\.google\.com/[a-z0-9\\.\-]+)#',
+];
+foreach( $t_regexp as $r ) {
+	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';
+	echo '### '.$cmd."\n";
+	exec( $cmd, $output );
+	$output = array_unique( $output );
+	$output = trim( implode( "\n", $output ) );
+	if( strlen($output) ) {
+		echo trim($output)."\n";
+	}
+}
+echo "######################\n\n";
+
+
+echo "########### 6: Looking for Digital Ocean buckets\n";
+$t_regexp = [
+	'#[^a-z0-9\\.\-]+([a-z0-9\\.\-]+)\.digitaloceanspaces\.com#',
+	'#[^a-z0-9\\.\-]+\.digitaloceanspaces\.com/([a-z0-9\\.\-]+)#',
 ];
 foreach( $t_regexp as $r ) {
 	$cmd = 'extract-endpoints -r -d '.$_directory.' -e "*" -v 2 -i "'.$t_ignore_ext.'" --gg "'.$r.'"';

@@ -12,7 +12,7 @@ params = {
     "hl" : "en",
     "gl" : "us",
     "google_domain" : "google.com",
-    "api_key" : "",
+    "api_key" : "ef36bfe645bc8bc2154487fb5708c8c4e435e20f7d91dc4b8d0f3ec11e87d562",
 }
 
 query = GoogleSearchResults( params )
