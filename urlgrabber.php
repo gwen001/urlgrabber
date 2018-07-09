@@ -34,6 +34,7 @@ function __autoload( $c ) {
 	$grabber->registerSource( 3, 'SourceWget' );
 	$grabber->registerSource( 4, 'SourceWayback' );
 	$grabber->registerSource( 5, 'SourceGoogleGrabber' );
+	$grabber->registerSource( 6, 'SourceCommonCrawl' );
 	$grabber->registerSource( 9, 'SourceLoop' );
 
 	foreach( $t_options as $k=>$v )

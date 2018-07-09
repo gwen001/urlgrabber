@@ -28,7 +28,7 @@ class SourceWayback
 		//$output = file_get_contents( 'wayback.txt' );
 		//var_dump( $output );
 		
-		if( strstr($output,'[-] Found nothing') != false ) {
+		if( strstr($output,'[-] Found nothing') !== false ) {
 			return $t_urls;
 		}
 		

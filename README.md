@@ -27,6 +27,7 @@ Available sources are:
 	3x. Wget, x=depth, default=1
 	4. Waybackurls
 	5. Google via custom grabber
+	6. Common Crawl
 	9x. Loop, will check the source code of urls found to try to get new urls, x=how many loops, default=1 (not implemented yet)
 ```
 
