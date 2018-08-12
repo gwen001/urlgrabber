@@ -10,7 +10,7 @@ class UrlGrabber
 {
 	const LOOPING_INDEX = 9;
 	
-	const T_ASSETS_EXTENSIONS = ['js','css','woff','woff2','eot','ttf','pdf','svg','png','ico','gif','jpg','jpeg','bmp','txt','csv','pdf','xml','mp3','mp4','wav','mpg','mpeg','avi','mov','wmv','doc','xls','zip','tar','7z','rar','tgz','gz','exe','rtp' ];
+	const T_ASSETS_EXTENSIONS = ['js','css','woff','woff2','eot','ttf','pdf','svg','png','ico','gif','jpg','jpeg','bmp','txt','csv','pdf','xml','mp3','mp4','wav','mpg','mpeg','avi','mov','wmv','doc','xls','zip','tar','7z','rar','tgz','gz','exe','rtp','cbr' ];
 	
 	const T_USER_AGENT = [
 		'Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.7.0',
@@ -48,9 +48,10 @@ class UrlGrabber
 	public function setTarget( $v ) {
 		$this->target = trim( $v );
 		if( is_null($this->dork) ) {
-			$this->_dork = self::DEFAULT_DORK;
-			$this->_dork = Utils::encodeDork( $this->dork );
-			$this->dork = str_replace( '__TARGET__', $this->target, $this->dork );
+			$this->setdork( self::DEFAULT_DORK );
+			//$this->_dork = self::DEFAULT_DORK;
+			//$this->_dork = Utils::encodeDork( $this->_dork );
+			//$this->dork = str_replace( '__TARGET__', $this->target, $this->_dork );
 		}
 		return true;
 	}
@@ -189,7 +190,7 @@ class UrlGrabber
 			for( $i=1 ; $i<=$this->t_run[self::LOOPING_INDEX]['params'] && count($t_urls) ; $i++ )
 			{
 				echo "Looping ".$i."...\n";
-				$t_urls = SourceLoop::run( $this->target, $this->tor, $this->dork, $this->https, $this->t_run[self::LOOPING_INDEX]['params'], $t_urls, $this->verbose );
+				$t_urls = SourceLoop::run( $this->target, $this->tor, $this->_dork, $this->https, $this->t_run[self::LOOPING_INDEX]['params'], $t_urls, $this->verbose );
 				$t_urls = array_unique( $t_urls );
 				if( $this->no_params ) {
 					$t_urls = $this->removeNoParams( $t_urls );
