@@ -15,7 +15,7 @@ function usage( $err=null ) {
 	exit();
 }
 
-define( 'T_ASSETS_EXTENSIONS', ['js','css','woff','woff2','eot','ttf','pdf','svg','png','ico','gif','jpg','jpeg','bmp','txt','csv','pdf','xml','mp3','mp4','wav','mpg','mpeg','avi','mov','wmv','doc','xls','zip','tar','7z','rar','tgz','gz','exe','rtp','cbr'] );
+define( 'T_ASSETS_EXTENSIONS', ['js','css','woff','woff2','eot','ttf','pdf','svg','png','ico','gif','jpg','jpeg','bmp','txt','csv','pdf','xml','mp3','mp4','wav','mpg','mpeg','avi','mov','wmv','doc','xls','zip','tar','7z','rar','tgz','gz','exe','rtp','cbr','flv'] );
 
 
 require_once( __DIR__.'/Utils.php' );
