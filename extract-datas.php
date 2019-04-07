@@ -120,7 +120,6 @@ foreach( $t_regexp as $r ) {
 	}
 }
 echo "######################\n\n";
-exit();
 
 echo "########### 3: Looking for relative urls within the same subdomain: ".$_subdomain."\n";
 $output = '';
