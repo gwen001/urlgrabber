@@ -236,7 +236,7 @@ function removeAssets( $t_urls )
 		$parse = parse_url( $u );
 		//var_dump($parse);
 		//var_dump( $parse['path'] );
-		if( strstr($parse['path'],'.') ) {
+		if( isset($parse['path']) && strstr($parse['path'],'.') ) {
 			$ext = strtolower( substr( $parse['path'], strrpos($parse['path'],'.')+1 ) );
 			//var_dump($ext);
 			if( in_array($ext,T_ASSETS_EXTENSIONS) || in_array(strtoupper($ext),T_ASSETS_EXTENSIONS) ) {
